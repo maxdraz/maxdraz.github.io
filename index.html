@@ -25,12 +25,13 @@
             background-color: var(--bg-main); 
             color: var(--text-main); 
             padding: 40px 20px;
+            overflow-x: hidden; /* Prevents global page layout breaks */
         }
-        .container { max-width: 1000px; margin: 0 auto; }
+        .container { max-width: 1000px; margin: 0 auto; position: relative; }
 
         /* Header Section */
         header {
-            margin-bottom: 60px;
+            margin-bottom: 40px;
             text-align: center;
         }
         header h1 { font-size: 2.5rem; margin-bottom: 8px; font-weight: 800; letter-spacing: -0.05em; }
@@ -44,22 +45,44 @@
         }
         .social-links a:hover { color: var(--accent-hover); text-decoration: underline; }
 
-        /* Project Cards Layout */
+        /* Horizontal Slider Wrapper */
+        .slider-container {
+            position: relative;
+            width: 100%;
+        }
+
+        /* The Scroll Track */
+        .slider-track {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;
+            gap: 30px;
+            padding-bottom: 20px;
+            
+            /* Hide default scrollbars across browsers */
+            -ms-overflow-style: none;  
+            scrollbar-width: none;  
+        }
+        .slider-track::-webkit-scrollbar {
+            display: none; 
+        }
+
+        /* Project Cards (Now modified for the slider track) */
         .project-card {
             background-color: var(--bg-card);
             border: 1px solid #334155;
             border-radius: var(--radius);
             padding: 30px;
-            margin-bottom: 40px;
             display: flex;
             flex-wrap: wrap;
             gap: 30px;
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
             transition: var(--transition);
-        }
-        .project-card:hover {
-            transform: translateY(-4px);
-            border-color: var(--accent);
+            
+            /* Crucial slider properties */
+            flex: 0 0 100%; /* Force each card to take full width of container */
+            scroll-snap-align: start; /* Magnetic lock effect when scrolling */
         }
 
         /* Media Column */
@@ -69,13 +92,12 @@
             display: flex;
             align-items: center;
         }
-        .project-media img, .project-media video {
+        .project-media img {
             width: 100%;
             height: auto;
             border-radius: calc(var(--radius) - 4px);
             display: block;
             object-fit: cover;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
         }
 
         /* Info Column */
@@ -106,18 +128,55 @@
             border: 1px solid #334155;
         }
 
-        /* Responsive Breakpoint */
+        /* Slider Navigation Buttons */
+        .nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(30, 41, 59, 0.85);
+            border: 1px solid #475569;
+            color: var(--accent);
+            font-size: 1.8rem;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            transition: var(--transition);
+            user-select: none;
+            backdrop-filter: blur(4px);
+        }
+        .nav-btn:hover {
+            background-color: var(--accent);
+            color: var(--bg-main);
+            border-color: var(--accent);
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
+        }
+        .prev-btn { left: -70px; }
+        .next-btn { right: -70px; }
+
+        /* Responsive Settings */
+        @media (max-width: 1160px) {
+            /* Move arrows inside the screen boundaries on smaller desktop windows */
+            .prev-btn { left: 15px; }
+            .next-btn { right: 15px; }
+        }
+
         @media (max-width: 768px) {
             body { padding: 20px 10px; }
             .project-card { padding: 20px; gap: 20px; }
             header h1 { font-size: 2rem; }
+            /* Hide arrows on mobile devices since swipe gestures are preferred */
+            .nav-btn { display: none; } 
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <!-- Header -->
         <header>
             <h1>Your Name</h1>
             <p>Unity Gameplay & Systems Programmer</p>
@@ -128,96 +187,117 @@
             </div>
         </header>
 
-        <!-- Project Section Container -->
-        <main>
+        <div class="slider-container">
             
-            <!-- Project Card 1: Gameplay Focus -->
-            <div class="project-card">
-                <div class="project-media">
-                    <!-- Replace with images/your-file.gif -->
-                    <img src="images/project1-gameplay.gif" alt="Project Cyber-Strike Demo">
-                </div>
-                <div class="project-info">
-                    <div>
-                        <h2 class="project-title">Project Cyber-Strike</h2>
-                        <div class="project-meta">Solo Project • 3 Months Development</div>
-                        <p class="project-description">A high-velocity, movement-focused technical prototype emphasizing fluid traversal systems and predictive combat pacing.</p>
-                        
-                        <h4>Technical Contributions</h4>
-                        <ul>
-                            <li>Developed a modular, state-driven 3D Character Controller mapping custom kinematic physics logic for wall-running and dashing.</li>
-                            <li>Architected an object-pooled projectile matrix, reducing runtime garbage collection allocations during intense combat loops by 35%.</li>
-                            <li>Wrote custom editor extensions to allow designers to paint AI spawn configurations directly into the scene view.</li>
-                        </ul>
-                    </div>
+            <button class="nav-btn prev-btn" id="prevBtn" aria-label="Previous Project">&#10094;</button>
+            <button class="nav-btn next-btn" id="nextBtn" aria-label="Next Project">&#10095;</button>
 
-                    <div class="tech-tags">
-                        <span class="tag">Unity 2022.3</span>
-                        <span class="tag">C#</span>
-                        <span class="tag">Custom Editors</span>
-                        <span class="tag">URP</span>
+            <main class="slider-track" id="sliderTrack">
+                
+                <div class="project-card">
+                    <div class="project-media">
+                        <img src="images/project1-gameplay.gif" alt="Project Cyber-Strike Demo">
                     </div>
-                </div>
-            </div>
-
-            <!-- Project Card 2: AI & Tools Focus -->
-            <div class="project-card">
-                <div class="project-media">
-                    <img src="images/project2-ai-tools.gif" alt="Dungeon Architect System Demo">
-                </div>
-                <div class="project-info">
-                    <div>
-                        <h2 class="project-title">Dungeon Architect & AI Ecosystem</h2>
-                        <div class="project-meta">Team Project (Lead Systems Programmer) • Game Jam</div>
-                        <p class="project-description">A backend systems showcase featuring infinite runtime procedural generation map algorithms and multi-threaded agent pathfinding layout grids.</p>
-                        
-                        <h4>Technical Contributions</h4>
-                        <ul>
-                            <li>Built a procedural grid generator utilizing cellular automata algorithms to construct completely randomized, navigable tile maps at runtime.</li>
-                            <li>Leveraged **Unity's C# Job System** and Burst Compiler to run multi-threaded A* pathfinding calculations for up to 400 simultaneous enemies.</li>
-                            <li>Created a node-based Behavior Tree architecture from scratch, allowing non-programmers to easily configure enemy combat mentalities.</li>
-                        </ul>
-                    </div>
-
-                    <div class="tech-tags">
-                        <span class="tag">Unity DOTS/Jobs</span>
-                        <span class="tag">Burst Compiler</span>
-                        <span class="tag">A* Pathfinding</span>
-                        <span class="tag">Data Structures</span>
+                    <div class="project-info">
+                        <div>
+                            <h2 class="project-title">Project Cyber-Strike</h2>
+                            <div class="project-meta">Solo Project • 3 Months Development</div>
+                            <p class="project-description">A high-velocity, movement-focused technical prototype emphasizing fluid traversal systems and predictive combat pacing.</p>
+                            
+                            <h4>Technical Contributions</h4>
+                            <ul>
+                                <li>Developed a modular, state-driven 3D Character Controller mapping custom kinematic physics logic for wall-running and dashing.</li>
+                                <li>Architected an object-pooled projectile matrix, reducing runtime garbage collection allocations during intense combat loops by 35%.</li>
+                                <li>Wrote custom editor extensions to allow designers to paint AI spawn configurations directly into the scene view.</li>
+                            </ul>
+                        </div>
+                        <div class="tech-tags">
+                            <span class="tag">Unity 2022.3</span>
+                            <span class="tag">C#</span>
+                            <span class="tag">Custom Editors</span>
+                            <span class="tag">URP</span>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Project Card 3: Mobile & Optimization Focus -->
-            <div class="project-card">
-                <div class="project-media">
-                    <img src="images/project3-graphics.gif" alt="Chrono-Rift Mobile Demo">
-                </div>
-                <div class="project-info">
-                    <div>
-                        <h2 class="project-title">Chrono-Rift: Mobile Odyssey</h2>
-                        <div class="project-meta">Contract Project • Released on Android/iOS</div>
-                        <p class="project-description">An optimized mobile action-RPG featuring heavy performance budgets, custom stylized visuals, and persistent remote account profiling.</p>
-                        
-                        <h4>Technical Contributions</h4>
-                        <ul>
-                            <li>Authored highly optimized HLSL vertex/fragment shaders via **Unity Shader Graph** to establish stylized stylized visuals without rendering overhead.</li>
-                            <li>Profiled rendering pipelines via the Unity Frame Debugger, converting complex geometry into static/dynamic batches to cut draw calls from 1,200 down to under 120.</li>
-                            <li>Integrated secure cloud-saving and user authentication modules utilizing Unity Gaming Services (UGS) cloud pipelines.</li>
-                        </ul>
+                <div class="project-card">
+                    <div class="project-media">
+                        <img src="images/project2-ai-tools.gif" alt="Dungeon Architect System Demo">
                     </div>
-
-                    <div class="tech-tags">
-                        <span class="tag">Mobile Optimization</span>
-                        <span class="tag">Shader Graph</span>
-                        <span class="tag">Unity Profiler</span>
-                        <span class="tag">UGS Backend</span>
+                    <div class="project-info">
+                        <div>
+                            <h2 class="project-title">Dungeon Architect Ecosystem</h2>
+                            <div class="project-meta">Team Project (Lead Systems Programmer) • Game Jam</div>
+                            <p class="project-description">A backend systems showcase featuring infinite runtime procedural generation map algorithms and multi-threaded agent pathfinding layout grids.</p>
+                            
+                            <h4>Technical Contributions</h4>
+                            <ul>
+                                <li>Built a procedural grid generator utilizing cellular automata algorithms to construct completely randomized, navigable tile maps at runtime.</li>
+                                <li>Leveraged Unity's C# Job System and Burst Compiler to run multi-threaded A* pathfinding calculations for up to 400 simultaneous enemies.</li>
+                                <li>Created a node-based Behavior Tree architecture from scratch, allowing non-programmers to easily configure enemy combat mentalities.</li>
+                            </ul>
+                        </div>
+                        <div class="tech-tags">
+                            <span class="tag">Unity DOTS/Jobs</span>
+                            <span class="tag">Burst Compiler</span>
+                            <span class="tag">A* Pathfinding</span>
+                            <span class="tag">Data Structures</span>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-        </main>
+                <div class="project-card">
+                    <div class="project-media">
+                        <img src="images/project3-graphics.gif" alt="Chrono-Rift Mobile Demo">
+                    </div>
+                    <div class="project-info">
+                        <div>
+                            <h2 class="project-title">Chrono-Rift: Mobile Odyssey</h2>
+                            <div class="project-meta">Contract Project • Released on Android/iOS</div>
+                            <p class="project-description">An optimized mobile action-RPG featuring heavy performance budgets, custom stylized visuals, and persistent remote account profiling.</p>
+                            
+                            <h4>Technical Contributions</h4>
+                            <ul>
+                                <li>Authored highly optimized HLSL vertex/fragment shaders via Unity Shader Graph to establish stylized visuals without rendering overhead.</li>
+                                <li>Profiled rendering pipelines via the Unity Frame Debugger, converting complex geometry into static/dynamic batches to cut draw calls from 1,200 down to under 120.</li>
+                                <li>Integrated secure cloud-saving and user authentication modules utilizing Unity Gaming Services (UGS) cloud pipelines.</li>
+                            </ul>
+                        </div>
+                        <div class="tech-tags">
+                            <span class="tag">Mobile Optimization</span>
+                            <span class="tag">Shader Graph</span>
+                            <span class="tag">Unity Profiler</span>
+                            <span class="tag">UGS Backend</span>
+                        </div>
+                    </div>
+                </div>
+
+            </main>
+        </div>
     </div>
 
+    <script>
+        const track = document.getElementById('sliderTrack');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+
+        // Calculate card dimensions dynamically based on layout + gap sizes
+        function getScrollAmount() {
+            const firstCard = track.firstElementChild;
+            const cardWidth = firstCard.getBoundingClientRect().width;
+            // Evaluates gap sizing out of grid configuration compute
+            const style = window.getComputedStyle(track);
+            const gap = parseFloat(style.gap) || 0;
+            return cardWidth + gap;
+        }
+
+        nextBtn.addEventListener('click', () => {
+            track.scrollBy({ left: getScrollAmount(), behavior: 'smooth' });
+        });
+
+        prevBtn.addEventListener('click', () => {
+            track.scrollBy({ left: -getScrollAmount(), behavior: 'smooth' });
+        });
+    </script>
 </body>
 </html>
