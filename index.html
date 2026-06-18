@@ -2,58 +2,55 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>My Unity Portfolio</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Name | Unity Developer Portfolio</title>
     <style>
-        body { font-family: sans-serif; line-height: 1.6; max-width: 800px; margin: auto; padding: 20px; }
-        .project { margin-bottom: 50px; border-bottom: 1px solid #ccc; padding-bottom: 20px; }
-        img { max-width: 100%; height: auto; border-radius: 8px; }
+        :root {
+            --bg-color: #f9f9f9;
+            --text-color: #333;
+            --accent-color: #007acc;
+        }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; line-height: 1.6; max-width: 900px; margin: auto; padding: 20px; color: var(--text-color); background-color: var(--bg-color); }
+        h1 { border-bottom: 2px solid var(--accent-color); padding-bottom: 10px; margin-bottom: 40px; }
+        .project { display: flex; flex-wrap: wrap; gap: 30px; margin-bottom: 60px; padding-bottom: 30px; border-bottom: 1px solid #ddd; }
+        .project-media { flex: 1; min-width: 300px; }
+        .project-media img { width: 100%; height: auto; border-radius: 6px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .project-info { flex: 1; min-width: 300px; }
+        .tech-tag { display: inline-block; background: #e0e0e0; padding: 2px 8px; margin: 2px; border-radius: 4px; font-size: 0.85rem; font-weight: bold; }
+        ul { padding-left: 20px; }
+        li { margin-bottom: 8px; }
     </style>
 </head>
 <body>
-    <h1>Unity Developer Portfolio</h1>
+
+    <h1>Your Name — Unity Game Developer</h1>
     
+    <!-- Project 1 -->
     <div class="project">
-        <h2>Hunt Royale</h2>
-        <img src="images/demo.gif" alt="Gameplay demo">
-        <h3>My Contributions:</h3>
-        <ul>
-            <li>Implemented custom character movement in C#.</li>
-            <li>Optimized particle effects for mobile performance.</li>
-            <li>Integrated Unity Input System for controller support.</li>
-        </ul>
+        <div class="project-media">
+            <!-- Replace with your actual GIF path -->
+            <img src="images/project1-gameplay.gif" alt="Gameplay demonstration of Project Title">
+        </div>
+        <div class="project-info">
+            <h2>Project Title</h2>
+            <p><strong>Role:</strong> Gameplay Programmer | <strong>Context:</strong> 48-Hour Game Jam</p>
+            <p>A brief 1-2 sentence pitch of what the game actually is (e.g., "A fast-paced neon cyberpunk roguelike where time only moves when you move.")</p>
+            
+            <h3>What I Did:</h3>
+            <ul>
+                <li>Engineered a modular **C# State Machine** to handle complex enemy AI behaviors.</li>
+                <li>Optimized performance by implementing **Object Pooling** for projectles, reducing frame drops by 40%.</li>
+                <li>Created custom screen-shake and particle feedback systems using **Unity Particle System** to maximize "game feel."</li>
+            </ul>
+
+            <div>
+                <span class="tech-tag">Unity 2022.3</span>
+                <span class="tech-tag">C#</span>
+                <span class="tech-tag">URP</span>
+                <span class="tech-tag">Git</span>
+            </div>
+        </div>
     </div>
 
-    <div class="project">
-        <h2>My Bots</h2>
-        <img src="images/demo.gif" alt="Gameplay demo">
-        <h3>My Contributions:</h3>
-        <ul>
-            <li>Implemented custom character movement in C#.</li>
-            <li>Optimized particle effects for mobile performance.</li>
-            <li>Integrated Unity Input System for controller support.</li>
-        </ul>
-    </div>
-
-    <div class="project">
-        <h2>Gold Rush</h2>
-        <img src="images/demo.gif" alt="Gameplay demo">
-        <h3>My Contributions:</h3>
-        <ul>
-            <li>Implemented custom character movement in C#.</li>
-            <li>Optimized particle effects for mobile performance.</li>
-            <li>Integrated Unity Input System for controller support.</li>
-        </ul>
-    </div>
-
-    <div class="project">
-        <h2>Fortune Match</h2>
-        <img src="images/demo.gif" alt="Gameplay demo">
-        <h3>My Contributions:</h3>
-        <ul>
-            <li>Implemented custom character movement in C#.</li>
-            <li>Optimized particle effects for mobile performance.</li>
-            <li>Integrated Unity Input System for controller support.</li>
-        </ul>
-    </div>
 </body>
 </html>
