@@ -14,7 +14,7 @@
             --accent: #38bdf8;        /* Vivid sky blue for highlights */
             --accent-hover: #7dd3fc;  /* Lighter blue for hover states */
             --radius: 12px;
-            --transition: all 0.2s ease-in-out;
+            --transition: all 0.25s ease-in-out;
         }
 
         /* Base Reset */
@@ -25,7 +25,7 @@
             background-color: var(--bg-main); 
             color: var(--text-main); 
             padding: 40px 20px;
-            overflow-x: hidden; /* Prevents global page layout breaks */
+            overflow-x: hidden; 
         }
         .container { max-width: 1000px; margin: 0 auto; position: relative; }
 
@@ -60,7 +60,7 @@
             gap: 30px;
             padding-bottom: 20px;
             
-            /* Hide default scrollbars across browsers */
+            /* Hide default scrollbars */
             -ms-overflow-style: none;  
             scrollbar-width: none;  
         }
@@ -68,7 +68,7 @@
             display: none; 
         }
 
-        /* Project Cards (Now modified for the slider track) */
+        /* Project Cards */
         .project-card {
             background-color: var(--bg-card);
             border: 1px solid #334155;
@@ -79,10 +79,8 @@
             gap: 30px;
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
             transition: var(--transition);
-            
-            /* Crucial slider properties */
-            flex: 0 0 100%; /* Force each card to take full width of container */
-            scroll-snap-align: start; /* Magnetic lock effect when scrolling */
+            flex: 0 0 100%; 
+            scroll-snap-align: start; 
         }
 
         /* Media Column */
@@ -133,21 +131,23 @@
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
-            background-color: rgba(30, 41, 59, 0.85);
+            background-color: rgba(30, 41, 59, 0.9);
             border: 1px solid #475569;
             color: var(--accent);
-            font-size: 1.8rem;
-            width: 50px;
-            height: 50px;
+            font-size: 1.5rem;
+            width: 46px;
+            height: 46px;
             border-radius: 50%;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
             z-index: 10;
-            transition: var(--transition);
             user-select: none;
             backdrop-filter: blur(4px);
+            
+            /* Smooth transitions for conditional visibility */
+            transition: opacity 0.25s ease-in-out, transform 0.2s ease, background-color 0.2s, color 0.2s, box-shadow 0.2s;
         }
         .nav-btn:hover {
             background-color: var(--accent);
@@ -155,22 +155,29 @@
             border-color: var(--accent);
             box-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
         }
-        .prev-btn { left: -70px; }
-        .next-btn { right: -70px; }
+        .prev-btn { left: -65px; }
+        .next-btn { right: -65px; }
 
         /* Responsive Settings */
         @media (max-width: 1160px) {
-            /* Move arrows inside the screen boundaries on smaller desktop windows */
-            .prev-btn { left: 15px; }
-            .next-btn { right: 15px; }
+            /* Pull arrows inside screen boundaries safely across smaller screen environments */
+            .prev-btn { left: 10px; }
+            .next-btn { right: 10px; }
         }
 
         @media (max-width: 768px) {
             body { padding: 20px 10px; }
             .project-card { padding: 20px; gap: 20px; }
             header h1 { font-size: 2rem; }
-            /* Hide arrows on mobile devices since swipe gestures are preferred */
-            .nav-btn { display: none; } 
+            
+            /* Scale down buttons slightly on mobile screens so they don't crowd content */
+            .nav-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+            .prev-btn { left: 5px; }
+            .next-btn { right: 5px; }
         }
     </style>
 </head>
@@ -281,16 +288,41 @@
         const prevBtn = document.getElementById('prevBtn');
         const nextBtn = document.getElementById('nextBtn');
 
-        // Calculate card dimensions dynamically based on layout + gap sizes
+        // Calculate card dimensions dynamically
         function getScrollAmount() {
             const firstCard = track.firstElementChild;
             const cardWidth = firstCard.getBoundingClientRect().width;
-            // Evaluates gap sizing out of grid configuration compute
             const style = window.getComputedStyle(track);
             const gap = parseFloat(style.gap) || 0;
             return cardWidth + gap;
         }
 
+        // Logic to dynamically handle button visibility based on layout bounds
+        function updateArrowVisibility() {
+            const scrollLeft = track.scrollLeft;
+            // Max scroll space equals total width minus the visible container width
+            const maxScroll = track.scrollWidth - track.clientWidth;
+
+            // Handle Previous Button (Allow a small 5px buffer for rendering calculations)
+            if (scrollLeft <= 5) {
+                prevBtn.style.opacity = '0';
+                prevBtn.style.pointerEvents = 'none';
+            } else {
+                prevBtn.style.opacity = '1';
+                prevBtn.style.pointerEvents = 'auto';
+            }
+
+            // Handle Next Button
+            if (scrollLeft >= maxScroll - 5) {
+                nextBtn.style.opacity = '0';
+                nextBtn.style.pointerEvents = 'none';
+            } else {
+                nextBtn.style.opacity = '1';
+                nextBtn.style.pointerEvents = 'auto';
+            }
+        }
+
+        // Button Event Listeners
         nextBtn.addEventListener('click', () => {
             track.scrollBy({ left: getScrollAmount(), behavior: 'smooth' });
         });
@@ -298,6 +330,13 @@
         prevBtn.addEventListener('click', () => {
             track.scrollBy({ left: -getScrollAmount(), behavior: 'smooth' });
         });
+
+        // Track Scroll & Resize events to keep check calculations synced
+        track.addEventListener('scroll', updateArrowVisibility);
+        window.addEventListener('resize', updateArrowVisibility);
+
+        // Run an initial evaluation frame on load
+        updateArrowVisibility();
     </script>
 </body>
 </html>
