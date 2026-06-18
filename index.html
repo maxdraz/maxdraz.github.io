@@ -204,7 +204,7 @@
                 
                 <div class="project-card">
                     <div class="project-media">
-                        <video autoplay loop muted playsinline>
+                        <video autoplay loop muted playsinline preload="auto" poster="images/project1-fallback.jpg">>
                             <source src="videos/fortune_match.MP4" type="video/mp4">
                             Your browser does not support the video tag.
                         </video>
@@ -233,8 +233,8 @@
 
                 <div class="project-card">
                     <div class="project-media">
-                        <video autoplay loop muted playsinline>
-                            <source src="videos/fortune_match.MP4" type="video/mp4">
+                        <video autoplay loop muted playsinline preload="none" poster="images/project2-fallback.jpg">
+                            <source data-src="videos/fortune_match.MP4" type="video/mp4">
                             Your browser does not support the video tag.
                         </video>
                     </div>
@@ -262,8 +262,8 @@
 
                 <div class="project-card">
                     <div class="project-media">
-                        <video autoplay loop muted playsinline>
-                            <source src="videos/fortune_match.MP4" type="video/mp4">
+                        <video autoplay loop muted playsinline preload="none" poster="images/project2-fallback.jpg">
+                            <source data-src="videos/fortune_match.MP4" type="video/mp4">
                             Your browser does not support the video tag.
                         </video>
                     </div>
@@ -294,52 +294,91 @@
     </div>
 
     <script>
-        const track = document.getElementById('sliderTrack');
-        const prevBtn = document.getElementById('prevBtn');
-        const nextBtn = document.getElementById('nextBtn');
-
-        function getScrollAmount() {
-            const firstCard = track.firstElementChild;
-            const cardWidth = firstCard.getBoundingClientRect().width;
-            const style = window.getComputedStyle(track);
-            const gap = parseFloat(style.gap) || 0;
-            return cardWidth + gap;
-        }
-
-        function updateArrowVisibility() {
-            const scrollLeft = track.scrollLeft;
-            const maxScroll = track.scrollWidth - track.clientWidth;
-
-            if (scrollLeft <= 5) {
-                prevBtn.style.opacity = '0';
-                prevBtn.style.pointerEvents = 'none';
-            } else {
-                prevBtn.style.opacity = '1';
-                prevBtn.style.pointerEvents = 'auto';
+            const track = document.getElementById('sliderTrack');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            
+            function getScrollAmount() {
+                const firstCard = track.firstElementChild;
+                const cardWidth = firstCard.getBoundingClientRect().width;
+                const style = window.getComputedStyle(track);
+                const gap = parseFloat(style.gap) || 0;
+                return cardWidth + gap;
             }
-
-            if (scrollLeft >= maxScroll - 5) {
-                nextBtn.style.opacity = '0';
-                nextBtn.style.pointerEvents = 'none';
-            } else {
-                nextBtn.style.opacity = '1';
-                nextBtn.style.pointerEvents = 'auto';
+            
+            // Lazy loading function to activate videos on demand
+            function checkAndLoadVisibleVideos() {
+                const cards = track.querySelectorAll('.project-card');
+                
+                cards.forEach((card) => {
+                    const rect = card.getBoundingClientRect();
+                    const trackRect = track.getBoundingClientRect();
+                    
+                    // Check if the card is actively visible inside the slider viewport boundaries
+                    const isVisible = (rect.left >= trackRect.left - 50 && rect.right <= trackRect.right + 50);
+                    
+                    const video = card.querySelector('video');
+                    if (!video) return;
+            
+                    if (isVisible) {
+                        const source = video.querySelector('source');
+                        // If the video hasn't been loaded yet, move data-src to src
+                        if (source && source.getAttribute('data-src')) {
+                            source.src = source.getAttribute('data-src');
+                            source.removeAttribute('data-src');
+                            video.load(); // Forces the browser to look at the new src pipeline
+                        }
+                        video.play().catch(err => console.log("Autoplay prevented:", err));
+                    } else {
+                        // Pause videos that have scrolled off-screen to save user CPU performance
+                        video.pause();
+                    }
+                });
             }
-        }
-
-        nextBtn.addEventListener('click', () => {
-            track.scrollBy({ left: getScrollAmount(), behavior: 'smooth' });
-        });
-
-        prevBtn.addEventListener('click', () => {
-            track.scrollBy({ left: -getScrollAmount(), behavior: 'smooth' });
-        });
-
-        track.addEventListener('scroll', updateArrowVisibility);
-        window.addEventListener('resize', updateArrowVisibility);
-
-        // Run initial evaluation
-        updateArrowVisibility();
+            
+            nextBtn.addEventListener('click', () => {
+                track.scrollBy({ left: getScrollAmount(), behavior: 'smooth' });
+            });
+            
+            prevBtn.addEventListener('click', () => {
+                track.scrollBy({ left: -getScrollAmount(), behavior: 'smooth' });
+            });
+            
+            function updateArrowVisibility() {
+                const scrollLeft = track.scrollLeft;
+                const maxScroll = track.scrollWidth - track.clientWidth;
+            
+                if (scrollLeft <= 5) {
+                    prevBtn.style.opacity = '0';
+                    prevBtn.style.pointerEvents = 'none';
+                } else {
+                    prevBtn.style.opacity = '1';
+                    prevBtn.style.pointerEvents = 'auto';
+                }
+            
+                if (scrollLeft >= maxScroll - 5) {
+                    nextBtn.style.opacity = '0';
+                    nextBtn.style.pointerEvents = 'none';
+                } else {
+                    nextBtn.style.opacity = '1';
+                    nextBtn.style.pointerEvents = 'auto';
+                }
+            }
+            
+            // Add our lazy loading check to the scroll and resize event listeners
+            track.addEventListener('scroll', () => {
+                updateArrowVisibility();
+                checkAndLoadVisibleVideos();
+            });
+            
+            window.addEventListener('resize', () => {
+                updateArrowVisibility();
+                checkAndLoadVisibleVideos();
+            });
+            
+            // Run initial evaluation frames on startup
+            updateArrowVisibility();
+            setTimeout(checkAndLoadVisibleVideos, 300); // Small delay allows layout engine to settle
     </script>
 </body>
 </html>
