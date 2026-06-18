@@ -117,9 +117,10 @@
 <body>
 
     <div class="container">
+        <!-- Header -->
         <header>
             <h1>Your Name</h1>
-            <p>Unity Gameplay & Tools Programmer</p>
+            <p>Unity Gameplay & Systems Programmer</p>
             <div class="social-links">
                 <a href="https://github.com/yourusername" target="_blank">GitHub</a> | 
                 <a href="https://linkedin.com/in/yourprofile" target="_blank">LinkedIn</a> | 
@@ -127,34 +128,95 @@
             </div>
         </header>
 
+        <!-- Project Section Container -->
         <main>
+            
+            <!-- Project Card 1: Gameplay Focus -->
             <div class="project-card">
                 <div class="project-media">
-                    <img src="images/project1-gameplay.gif" alt="Project 1 Mechanics Demo">
+                    <!-- Replace with images/your-file.gif -->
+                    <img src="images/project1-gameplay.gif" alt="Project Cyber-Strike Demo">
                 </div>
                 <div class="project-info">
                     <div>
                         <h2 class="project-title">Project Cyber-Strike</h2>
                         <div class="project-meta">Solo Project • 3 Months Development</div>
-                        <p class="project-description">A high-velocity, movement-focused technical prototype emphasizing fluid traversal systems and predictive enemy AI behavior grids.</p>
+                        <p class="project-description">A high-velocity, movement-focused technical prototype emphasizing fluid traversal systems and predictive combat pacing.</p>
                         
                         <h4>Technical Contributions</h4>
                         <ul>
-                            <li>Developed a modular, state-driven 3D Character Controller mapping kinematic physics scripts for wall-running and dashing.</li>
-                            <li>Architected an object-pooled projectile matrix, dropping system memory usage during intense firefights by 35%.</li>
-                            <li>Wrote custom editor extensions to allow designers to paint custom AI spawn nodes directly into the scene view.</li>
+                            <li>Developed a modular, state-driven 3D Character Controller mapping custom kinematic physics logic for wall-running and dashing.</li>
+                            <li>Architected an object-pooled projectile matrix, reducing runtime garbage collection allocations during intense combat loops by 35%.</li>
+                            <li>Wrote custom editor extensions to allow designers to paint AI spawn configurations directly into the scene view.</li>
                         </ul>
                     </div>
 
                     <div class="tech-tags">
                         <span class="tag">Unity 2022.3</span>
                         <span class="tag">C#</span>
-                        <span class="tag">Custom Editor Scripts</span>
+                        <span class="tag">Custom Editors</span>
                         <span class="tag">URP</span>
                     </div>
                 </div>
             </div>
-            </main>
+
+            <!-- Project Card 2: AI & Tools Focus -->
+            <div class="project-card">
+                <div class="project-media">
+                    <img src="images/project2-ai-tools.gif" alt="Dungeon Architect System Demo">
+                </div>
+                <div class="project-info">
+                    <div>
+                        <h2 class="project-title">Dungeon Architect & AI Ecosystem</h2>
+                        <div class="project-meta">Team Project (Lead Systems Programmer) • Game Jam</div>
+                        <p class="project-description">A backend systems showcase featuring infinite runtime procedural generation map algorithms and multi-threaded agent pathfinding layout grids.</p>
+                        
+                        <h4>Technical Contributions</h4>
+                        <ul>
+                            <li>Built a procedural grid generator utilizing cellular automata algorithms to construct completely randomized, navigable tile maps at runtime.</li>
+                            <li>Leveraged **Unity's C# Job System** and Burst Compiler to run multi-threaded A* pathfinding calculations for up to 400 simultaneous enemies.</li>
+                            <li>Created a node-based Behavior Tree architecture from scratch, allowing non-programmers to easily configure enemy combat mentalities.</li>
+                        </ul>
+                    </div>
+
+                    <div class="tech-tags">
+                        <span class="tag">Unity DOTS/Jobs</span>
+                        <span class="tag">Burst Compiler</span>
+                        <span class="tag">A* Pathfinding</span>
+                        <span class="tag">Data Structures</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project Card 3: Mobile & Optimization Focus -->
+            <div class="project-card">
+                <div class="project-media">
+                    <img src="images/project3-graphics.gif" alt="Chrono-Rift Mobile Demo">
+                </div>
+                <div class="project-info">
+                    <div>
+                        <h2 class="project-title">Chrono-Rift: Mobile Odyssey</h2>
+                        <div class="project-meta">Contract Project • Released on Android/iOS</div>
+                        <p class="project-description">An optimized mobile action-RPG featuring heavy performance budgets, custom stylized visuals, and persistent remote account profiling.</p>
+                        
+                        <h4>Technical Contributions</h4>
+                        <ul>
+                            <li>Authored highly optimized HLSL vertex/fragment shaders via **Unity Shader Graph** to establish stylized stylized visuals without rendering overhead.</li>
+                            <li>Profiled rendering pipelines via the Unity Frame Debugger, converting complex geometry into static/dynamic batches to cut draw calls from 1,200 down to under 120.</li>
+                            <li>Integrated secure cloud-saving and user authentication modules utilizing Unity Gaming Services (UGS) cloud pipelines.</li>
+                        </ul>
+                    </div>
+
+                    <div class="tech-tags">
+                        <span class="tag">Mobile Optimization</span>
+                        <span class="tag">Shader Graph</span>
+                        <span class="tag">Unity Profiler</span>
+                        <span class="tag">UGS Backend</span>
+                    </div>
+                </div>
+            </div>
+
+        </main>
     </div>
 
 </body>
