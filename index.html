@@ -90,12 +90,15 @@
             display: flex;
             align-items: center;
         }
-        .project-media img {
+        /* Updated to style video elements perfectly within the card containers */
+        .project-media video {
             width: 100%;
             height: auto;
             border-radius: calc(var(--radius) - 4px);
             display: block;
             object-fit: cover;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+            background-color: #0b0f19; /* Prevents visual pop-in flashing while video buffers */
         }
 
         /* Info Column */
@@ -145,8 +148,6 @@
             z-index: 10;
             user-select: none;
             backdrop-filter: blur(4px);
-            
-            /* Smooth transitions for conditional visibility */
             transition: opacity 0.25s ease-in-out, transform 0.2s ease, background-color 0.2s, color 0.2s, box-shadow 0.2s;
         }
         .nav-btn:hover {
@@ -160,7 +161,6 @@
 
         /* Responsive Settings */
         @media (max-width: 1160px) {
-            /* Pull arrows inside screen boundaries safely across smaller screen environments */
             .prev-btn { left: 10px; }
             .next-btn { right: 10px; }
         }
@@ -170,7 +170,6 @@
             .project-card { padding: 20px; gap: 20px; }
             header h1 { font-size: 2rem; }
             
-            /* Scale down buttons slightly on mobile screens so they don't crowd content */
             .nav-btn {
                 width: 40px;
                 height: 40px;
@@ -203,7 +202,10 @@
                 
                 <div class="project-card">
                     <div class="project-media">
-                        <img src="images/project1-gameplay.gif" alt="Project Cyber-Strike Demo">
+                        <video autoplay loop muted playsinline>
+                            <source src="videos/project1-gameplay.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
                     </div>
                     <div class="project-info">
                         <div>
@@ -229,7 +231,10 @@
 
                 <div class="project-card">
                     <div class="project-media">
-                        <img src="images/project2-ai-tools.gif" alt="Dungeon Architect System Demo">
+                        <video autoplay loop muted playsinline>
+                            <source src="videos/project2-ai-tools.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
                     </div>
                     <div class="project-info">
                         <div>
@@ -255,7 +260,10 @@
 
                 <div class="project-card">
                     <div class="project-media">
-                        <img src="images/project3-graphics.gif" alt="Chrono-Rift Mobile Demo">
+                        <video autoplay loop muted playsinline>
+                            <source src="videos/project3-graphics.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
                     </div>
                     <div class="project-info">
                         <div>
@@ -288,7 +296,6 @@
         const prevBtn = document.getElementById('prevBtn');
         const nextBtn = document.getElementById('nextBtn');
 
-        // Calculate card dimensions dynamically
         function getScrollAmount() {
             const firstCard = track.firstElementChild;
             const cardWidth = firstCard.getBoundingClientRect().width;
@@ -297,13 +304,10 @@
             return cardWidth + gap;
         }
 
-        // Logic to dynamically handle button visibility based on layout bounds
         function updateArrowVisibility() {
             const scrollLeft = track.scrollLeft;
-            // Max scroll space equals total width minus the visible container width
             const maxScroll = track.scrollWidth - track.clientWidth;
 
-            // Handle Previous Button (Allow a small 5px buffer for rendering calculations)
             if (scrollLeft <= 5) {
                 prevBtn.style.opacity = '0';
                 prevBtn.style.pointerEvents = 'none';
@@ -312,7 +316,6 @@
                 prevBtn.style.pointerEvents = 'auto';
             }
 
-            // Handle Next Button
             if (scrollLeft >= maxScroll - 5) {
                 nextBtn.style.opacity = '0';
                 nextBtn.style.pointerEvents = 'none';
@@ -322,7 +325,6 @@
             }
         }
 
-        // Button Event Listeners
         nextBtn.addEventListener('click', () => {
             track.scrollBy({ left: getScrollAmount(), behavior: 'smooth' });
         });
@@ -331,11 +333,10 @@
             track.scrollBy({ left: -getScrollAmount(), behavior: 'smooth' });
         });
 
-        // Track Scroll & Resize events to keep check calculations synced
         track.addEventListener('scroll', updateArrowVisibility);
         window.addEventListener('resize', updateArrowVisibility);
 
-        // Run an initial evaluation frame on load
+        // Run initial evaluation
         updateArrowVisibility();
     </script>
 </body>
